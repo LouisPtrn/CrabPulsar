@@ -5,7 +5,7 @@ import scipy as sp
 import astropy
 from math import pi
 
-filename=os.path.join("example_data/20260203_165003_B0329+54.npz")
+filename=os.path.join("example_data/20260203_161622_B1933+16.npz")
 obsdata = np.load(filename)
 print(obsdata['header'])
 print("")
@@ -73,7 +73,7 @@ def shift_rows(data_in, shifts):
 f_c = 611        # MHz (central frequency)
 bw = 10          # MHz total bandwidth
 
-P = 0.714        # seconds, pulsar period
+P = 0.71442775        # seconds, pulsar period
 DM = 26.7        # pc cm^-3, trial dispersion measure
 
 nchan = time_averaged.shape[0]
