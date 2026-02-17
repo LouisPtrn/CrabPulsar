@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 import scipy.optimize as opt
 import os
 
-filename=os.path.join("mydata/20260203_165003_B0329+54.npz")# Enter the filename of your data here
+filename=os.path.join("mydata/20260217_143556_B0531+21.npz")# Enter the filename of your data here
 obsdata = np.load(filename)
 print(obsdata['header'])
 data=obsdata['data']
 
-print("'Guess Period':",obsdata['approx_period'])
+#print("'Guess Period':",obsdata['approx_period'])
 
 templatefilename=os.path.join("template.txt")# Enter the filename of your data here
 template=np.loadtxt(templatefilename)
@@ -32,7 +32,7 @@ def shift_rows(data_in, shifts):
 
 # Nasty function treat as black box. Gets time of arrivals
 ########################################################################
-def get_toas(ddfreq_averaged, obsdata, plots=True):
+def get_toas(ddfreq_averaged, obsdata, plots=False):
     times = obsdata['times']  # The time of phase zero for each subint
     approx_period = obsdata['approx_period']  # The approximate period of the pulsar
     toas = []
@@ -195,8 +195,8 @@ def shift_rows(data_in, shifts):
 f_c = 611        # MHz (central frequency)
 bw = 10          # MHz total bandwidth
 
-P = 0.71442775        # seconds, pulsar period
-DM = 50        # pc cm^-3, trial dispersion measure
+P = 33.5*10**-3        # seconds, pulsar period
+DM = 25        # pc cm^-3, trial dispersion measure
 
 nchan = time_averaged.shape[0]
 
@@ -248,10 +248,24 @@ toas,*_ = get_toas(ddfreq_averaged, obsdata)
 ###############################################################################
 # WILL DO ERRORS FOR THIS SECTION LATER WITH POST PROCESSING
 
+#  minimum integration time required to detect a 1 Jy source with the 42-ft radio telescope?
+# S_min = 1.0  # Jy
+# T_sys = 100.0  # K (system temperature of the telescope - this is a gue
+# G = 0.1  # K/Jy
+# n_pol = 2  # number of polarizations
+# BW = 10e6  # Hz
+# SNR = (S_min * G * np.sqrt(n_pol * BW * t_int)) / T_sys
+# t_int = (SNR * T_sys) / (S_min * G * np.sqrt(n_pol * BW)) ** 2
+# print("Minimum integration time to detect a 1 Jy source: {:.2f} seconds".format(t_int))
+
+
 # Trial DM range (adjust as needed)
 DM_trials = np.linspace(1, 1000, 10000)   # pc cm^-3
 print(DM_trials)
 snr_vals = []
+
+# get std of the integrated profile
+std = np.std(integrated)
 
 for DM_try in DM_trials:
     # Dispersion delay (seconds)
@@ -268,7 +282,7 @@ for DM_try in DM_trials:
 
     # Simple S/N estimate
     peak = np.max(prof)
-    rms = np.std(prof)
+    rms = std
     snr = peak / rms
 
     snr_vals.append(snr)
