@@ -74,7 +74,7 @@ f_c = 611        # MHz (central frequency)
 bw = 10          # MHz total bandwidth
 
 P = 33.5*10**-3       # seconds, pulsar period
-DM = 56        # pc cm^-3, trial dispersion measure
+DM = 54.15        # pc cm^-3, trial dispersion measure
 
 nchan = time_averaged.shape[0]
 
@@ -99,6 +99,7 @@ nu_ref = freq.max()
 
 # Delay relative to reference frequency
 delay_s = K * DM * (freq**-2 - nu_ref**-2)
+# print("Delay (s):", delay_s)
 
 # Convert delay to phase-bin shifts (negative = de-disperse)
 bindelay = -np.round(delay_s / dt).astype(int)

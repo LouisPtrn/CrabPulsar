@@ -3,17 +3,17 @@ import matplotlib.pyplot as plt
 import scipy.optimize as opt
 import os
 
-filename=os.path.join("mydata/20260217_143556_B0531+21.npz")# Enter the filename of your data here
+filename=os.path.join("mydata/20260203_165003_B0329+54.npz")# Enter the filename of your data here
 obsdata = np.load(filename)
 print(obsdata['header'])
 data=obsdata['data']
 
-#print("'Guess Period':",obsdata['approx_period'])
+print("'Guess Period':",obsdata['approx_period'])
 
 templatefilename=os.path.join("template.txt")# Enter the filename of your data here
 template=np.loadtxt(templatefilename)
-plt.plot(template)
-plt.show()
+#plt.plot(template)
+
 
 #  This function will shift each row of a 2-d (3-d) array by the the number of columns specified in the "shifts" array.
 #  data_in - the 2-d (3-d) array to work on
@@ -195,7 +195,7 @@ def shift_rows(data_in, shifts):
 f_c = 611        # MHz (central frequency)
 bw = 10          # MHz total bandwidth
 
-P = 33.5*10**-3        # seconds, pulsar period
+P = 0.7145       # seconds, pulsar period
 DM = 25        # pc cm^-3, trial dispersion measure
 
 nchan = time_averaged.shape[0]
@@ -236,17 +236,17 @@ nsub, nchan,nphase = data.shape
 ichan=np.arange(nchan)
 
 toas,*_ = get_toas(ddfreq_averaged, obsdata)
+toa_errs = get_toas(ddfreq_averaged, obsdata)[1]
 
-# with open(filename+".toas.txt","w") as outf:
-#     for t,e in zip(toas,toa_errs):
-#         print("{:.18f} {:.3g}".format(t,e))
-#         outf.write("{:.18f} {:.3g}\n".format(t,e))
+with open(filename+".toas.txt","w") as outf:
+    for t,e in zip(toas,toa_errs):
+        #print("{:.18f} {:.3g}".format(t,e))
+        outf.write("{:.18f} {:.3g}\n".format(t,e))
 
 
 ###############################################################################
 # Estimate Dispersion Measure by maximizing S/N
 ###############################################################################
-# WILL DO ERRORS FOR THIS SECTION LATER WITH POST PROCESSING
 
 #  minimum integration time required to detect a 1 Jy source with the 42-ft radio telescope?
 # S_min = 1.0  # Jy
@@ -260,7 +260,7 @@ toas,*_ = get_toas(ddfreq_averaged, obsdata)
 
 
 # Trial DM range (adjust as needed)
-DM_trials = np.linspace(1, 1000, 10000)   # pc cm^-3
+DM_trials = np.linspace(1, 100, 1000)   # pc cm^-3
 print(DM_trials)
 snr_vals = []
 
@@ -293,3 +293,30 @@ snr_vals = np.array(snr_vals)
 best_DM = DM_trials[np.argmax(snr_vals)]
 
 print("Estimated DM = {:.3f} pc cm^-3".format(best_DM))
+
+# get uncertainty by fitting a parabola to the S/N curve near the peak and finding the curvature at the peak. The uncertainty is related to the curvature by sigma_DM = sqrt(-1/(2*a)) where a is the coefficient of the quadratic term in the parabola fit.
+peak_index = np.argmax(snr_vals)
+fit_range = 10  # number of points on either side of the peak to use for fitting
+x_fit = DM_trials[peak_index - fit_range:peak_index + fit_range + 1]
+y_fit = snr_vals[peak_index - fit_range:peak_index + fit_range + 1]
+
+def parabola(x, a, b, c):
+    return a * (x - best_DM)**2 + b * (x - best_DM) + c
+
+popt, _ = opt.curve_fit(parabola, x_fit, y_fit)
+a, b, c = popt
+dm_uncertainty = np.sqrt(-1 / (2 * a))
+print("Estimated DM uncertainty = {:.3f} pc cm^-3".format(dm_uncertainty))
+
+# plot of parabola fit
+x_parabola = np.linspace(x_fit.min(), x_fit.max(), 100)
+y_parabola = parabola(x_parabola, *popt)
+plt.figure(figsize=(10, 6))
+plt.plot(DM_trials, snr_vals, label='S/N vs DM')
+plt.plot(x_parabola, y_parabola, label='Parabola Fit', color='red')
+plt.axvline(best_DM, color='green', linestyle='--', label='Best DM')
+plt.xlabel('Dispersion Measure (pc cm$^{-3}$)')
+plt.ylabel('S/N')
+plt.title('S/N vs DM with Parabola Fit')
+plt.legend()
+plt.show()

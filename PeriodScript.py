@@ -6,10 +6,6 @@ from math import pi
 # Program to calculate the period of a pulsar from the integrated profile using Fourier transform
 #################################################################################################
 
-#filename=os.path.join("mydata/20260203_165003_B0329+54.npz")
-#filename=os.path.join("mydata/20260217_095751_B1933+16.npz")
-#filename=os.path.join("mydata/20260217_121849_B2020+28.npz")
-
 data_directory=os.path.join('LovellTimeSeries/')
 
 print("Files avaliable:",os.listdir(data_directory))
@@ -19,8 +15,8 @@ print("Files avaliable:",os.listdir(data_directory))
 # This is 'unformatted' raw binary data. The data are arranged in sequence with 1 byte per sample.
 # Each sample is a single 8-bit signed integer, i.e. taking a value between -128 and +127.
 # The samples are spaced uniformly in time.
-datfile = "psr5.dat"
-hdrfile= "psr5.hdr"
+datfile = "psr4.dat"
+hdrfile= "psr4.hdr"
 
 dt = None
 with open(os.path.join(data_directory,hdrfile)) as f:
@@ -52,13 +48,20 @@ plt.show()
 #Calc fourier transform and get period
 
 ft = np.fft.rfft(data)
-ft[0] = 0 # set the zero frequency component to zero, as this is just the mean of the data and doesn't contain any information about the period.
-power = np.real(ft)*np.real(ft) + np.imag(ft)*np.imag(ft)
 
+# peaks at 50 Hz, 100 Hz, 200 Hz. This is because of AC power supply interference.
+# We can ignore these peaks as they are not related to the pulsar signal.
+
+power = np.real(ft)*np.real(ft) + np.imag(ft)*np.imag(ft)
 # sample frequency is the inverse of the sample interval
 fs = 1/dt
-
 freqs = np.fft.rfftfreq(len(data),d=dt)
+# remove 0 Hz, 50 Hz, 100 Hz, 200 Hz peaks
+power[(freqs > -1) & (freqs < 1)] = 0
+power[(freqs > 49) & (freqs < 51)] = 0
+power[(freqs > 99) & (freqs < 101)] = 0
+power[(freqs > 199) & (freqs < 201)] = 0
+
 plt.figure(figsize=(10,10))
 plt.plot(freqs,power)
 plt.xlabel("Frequency (Hz)") # change this line to add your x-axis label
