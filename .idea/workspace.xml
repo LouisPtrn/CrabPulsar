@@ -2,16 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f744ce19-3b0c-4529-ad0e-c447a7a09810" name="Changes" comment="Test push 2">
+      <change afterPath="$PROJECT_DIR$/CrabPulsarTiming.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/CrabPulsar.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CrabPulsar.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Crab Pulsar Timing.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Crab Pulsar Timing.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DispersionMeasureScript.py" beforeDir="false" afterPath="$PROJECT_DIR$/DispersionMeasureScript.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DispersionVisualisation.py" beforeDir="false" afterPath="$PROJECT_DIR$/DispersionVisualisation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Make Time of Arrivals.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Make Time of Arrivals.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PeriodScript.py" beforeDir="false" afterPath="$PROJECT_DIR$/PeriodScript.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mydata/20260203_161622_B1933+16.npz.toas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mydata/20260203_161622_B1933+16.npz.toas.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mydata/20260203_165003_B0329+54.npz.toas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mydata/20260203_165003_B0329+54.npz.toas.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,12 +56,14 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.CrabPulsarTiming.executor&quot;: &quot;Run&quot;,
     &quot;Python.DispersionMeasureScript.executor&quot;: &quot;Run&quot;,
     &quot;Python.DispersionVisualisation.executor&quot;: &quot;Run&quot;,
     &quot;Python.PeriodCalculator.executor&quot;: &quot;Run&quot;,
     &quot;Python.PeriodScript (1).executor&quot;: &quot;Run&quot;,
     &quot;Python.PeriodScript2.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
@@ -83,7 +80,31 @@
       <recent name="C:\Users\x72635lp.DS\PycharmProjects\Crab Pulsar" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.PeriodScript (1)">
+  <component name="RunManager" selected="Python.CrabPulsarTiming">
+    <configuration name="CrabPulsarTiming" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="CrabPulsar" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CrabPulsarTiming.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="DispersionMeasureScript" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="CrabPulsar" />
       <option name="ENV_FILES" value="" />
@@ -145,31 +166,9 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="RUN_TOOL" value="" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PeriodScript.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="PeriodScript" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="CrabPulsar" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="C:\Users\x72635lp\PycharmProjects\CrabPulsar\PeriodScript.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -191,6 +190,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="RUN_TOOL" value="" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PeriodScript2.py" />
       <option name="PARAMETERS" value="" />
@@ -203,17 +203,18 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.CrabPulsarTiming" />
         <item itemvalue="Python.PeriodScript (1)" />
         <item itemvalue="Python.DispersionMeasureScript" />
         <item itemvalue="Python.DispersionVisualisation" />
         <item itemvalue="Python.PeriodScript2" />
-        <item itemvalue="Python.PeriodScript" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.31033.139" />
         <option value="bundled-python-sdk-2653e85de345-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.31033.139" />
       </set>
     </attachedChunks>
@@ -226,6 +227,11 @@
       <option name="presentableId" value="Default" />
       <updated>1770733728579</updated>
       <workItem from="1770733729598" duration="8758000" />
+      <workItem from="1772532775254" duration="262000" />
+      <workItem from="1772533054206" duration="4779000" />
+      <workItem from="1772537897959" duration="136000" />
+      <workItem from="1772538048851" duration="4428000" />
+      <workItem from="1772542538115" duration="192000" />
     </task>
     <task id="LOCAL-00001" summary="Test push">
       <option name="closed" value="true" />
@@ -256,7 +262,9 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/CrabPulsar$DispersionMeasureScript.coverage" NAME="DispersionMeasureScript Coverage Results" MODIFIED="1770742452401" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CrabPulsar$PeriodScript__1_.coverage" NAME="PeriodScript (1) Coverage Results" MODIFIED="1772533122496" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CrabPulsar$DispersionVisualisation.coverage" NAME="DispersionVisualisation Coverage Results" MODIFIED="1770738011197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CrabPulsar$CrabPulsarTiming.coverage" NAME="CrabPulsarTiming Coverage Results" MODIFIED="1772542707169" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
