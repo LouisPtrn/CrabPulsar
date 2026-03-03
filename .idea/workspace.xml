@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f744ce19-3b0c-4529-ad0e-c447a7a09810" name="Changes" comment="Test push 2">
-      <change afterPath="$PROJECT_DIR$/CrabPulsarTiming.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/CrabPulsar.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CrabPulsar.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="f744ce19-3b0c-4529-ad0e-c447a7a09810" name="Changes" comment="Added crab pulsar timing script.&#10;&#10;Includes interpolation function calculation and earth position delay.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Crab Pulsar Timing.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Crab Pulsar Timing.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CrabPulsarTiming.py" beforeDir="false" afterPath="$PROJECT_DIR$/CrabPulsarTiming.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,8 +35,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/LouisPtrn/CrabPulsar.git&quot;,
-    &quot;accountId&quot;: &quot;50136ece-ad6e-451f-be7b-91954f398d55&quot;
+    &quot;url&quot;: &quot;https://github.com/LouisPtrn/CrabPulsar&quot;,
+    &quot;accountId&quot;: &quot;ad6fc164-3f48-48d0-b033-eb842964c9a0&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -204,8 +201,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.CrabPulsarTiming" />
-        <item itemvalue="Python.PeriodScript (1)" />
         <item itemvalue="Python.DispersionMeasureScript" />
+        <item itemvalue="Python.PeriodScript (1)" />
         <item itemvalue="Python.DispersionVisualisation" />
         <item itemvalue="Python.PeriodScript2" />
       </list>
@@ -231,7 +228,8 @@
       <workItem from="1772533054206" duration="4779000" />
       <workItem from="1772537897959" duration="136000" />
       <workItem from="1772538048851" duration="4428000" />
-      <workItem from="1772542538115" duration="192000" />
+      <workItem from="1772542538115" duration="325000" />
+      <workItem from="1772551588993" duration="4488000" />
     </task>
     <task id="LOCAL-00001" summary="Test push">
       <option name="closed" value="true" />
@@ -249,22 +247,42 @@
       <option name="project" value="LOCAL" />
       <updated>1770736133106</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added crab pulsar timing script.&#10;&#10;Includes interpolation function calculation and earth position delay.">
+      <option name="closed" value="true" />
+      <created>1772542844203</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1772542844203</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Test push" />
     <MESSAGE value="Test push 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Test push 2" />
+    <MESSAGE value="Added crab pulsar timing script.&#10;&#10;Includes interpolation function calculation and earth position delay." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added crab pulsar timing script.&#10;&#10;Includes interpolation function calculation and earth position delay." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CrabPulsar$DispersionMeasureScript.coverage" NAME="DispersionMeasureScript Coverage Results" MODIFIED="1770742452401" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CrabPulsar$PeriodScript__1_.coverage" NAME="PeriodScript (1) Coverage Results" MODIFIED="1772533122496" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CrabPulsar$DispersionMeasureScript.coverage" NAME="DispersionMeasureScript Coverage Results" MODIFIED="1772552443902" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CrabPulsar$DispersionVisualisation.coverage" NAME="DispersionVisualisation Coverage Results" MODIFIED="1770738011197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CrabPulsar$CrabPulsarTiming.coverage" NAME="CrabPulsarTiming Coverage Results" MODIFIED="1772542707169" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CrabPulsar$CrabPulsarTiming.coverage" NAME="CrabPulsarTiming Coverage Results" MODIFIED="1772556088002" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

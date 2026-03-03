@@ -2,6 +2,7 @@ import os
 import numpy as np
 
 from scipy import interpolate
+import scipy.optimize as opt
 
 from astropy import coordinates as coord
 from astropy import units as u
@@ -18,11 +19,15 @@ print(obsdata["header"])
 period_guess = obsdata['approx_period']
 
 toafile  = os.path.join("mydata/20260217_143556_B0531+21.npz.toas.txt")
-
 baryfile = os.path.join("ssb_files/ssb_2026.txt") # will work for all of 2026
+ra = 5.575
+dec = 22.0145
+time_start = "2026-02-17T14:35:56.000"  # Start time in iso format
+time_end = "2026-02-17T16:35:56.000"    # End time in iso format
 
 year, month, day, xpos, ypos, zpos = np.loadtxt(baryfile,unpack=True)
-toa_list, toa_errs = np.loadtxt(toafile,unpack=True)
+toa_list, toa_errs = np.loadtxt(toafile,unpack=True) # list of modified julian dates of arrival and errors
+
 
 def get_interp():
     # Interpolation of Earth-Barycenter position
@@ -80,132 +85,12 @@ def get_interp():
     return interp_function
 
 
-# Nasty function treat as black box. Gets time of arrivals
-########################################################################
-def get_toas(ddfreq_averaged, obsdata, plots=False):
-    times = obsdata['times']  # The time of phase zero for each subint
-    approx_period = obsdata['approx_period']  # The approximate period of the pulsar
-    toas = []
-    toa_errs = []
-    tempo2_toas = []
-
-    # Equation A7 in Taylor 1992
-    def get_dchi(tau, N, nbin):
-        dphi = np.angle(xspec)[1:N]
-
-        k = np.arange(1, N)
-
-        dchi = np.sum(k * np.abs(f_prof[1:N]) * np.abs(f_template[1:N]) * np.sin(dphi + 2 * np.pi * k * tau / nbin))
-        return dchi
-
-    # Equation A9 in Taylor 1992
-    def get_b(tau, N, nbin):
-        dphi = np.angle(xspec)[1:N]
-        k = np.arange(1, N)
-        scale = np.sum(np.abs(f_prof[1:N]) * np.abs(f_template[1:N]) * np.cos(dphi + 2 * np.pi * k * tau / nbin))
-        scale /= np.sum(np.abs(f_template[1:N]) ** 2)
-        return scale
-
-    # Equation A10 in Taylor 1992
-    def get_sigma_tau(tau, N, nbin, b):
-        dphi = np.angle(xspec)[1:N]
-        k = np.arange(1, N)
-        chi2 = np.sum(np.abs(f_prof[1:N]) ** 2 + b ** 2 * np.abs(f_template[1:N])) - 2 * b * np.sum(
-            np.abs(f_prof[1:N]) * np.abs(f_template[1:N]) * np.cos(dphi + 2 * np.pi * k * tau / nbin))
-        sigma2 = chi2 / (N - 1)
-        de = np.sum(
-            (k ** 2) * np.abs(f_prof[1:N]) * np.abs(f_template[1:N]) * np.cos(dphi + 2 * np.pi * k * tau / nbin))
-        fac = nbin / (2 * np.pi)
-        return np.sqrt(sigma2 / (2 * b * de)) * fac
-
-    # Just for plotting, rotates an array by a fractional phase shift using Fourier transform
-    def rotate_phs(ff, phase_shift):
-        fr = ff * np.exp(-1.0j * 2 * np.pi * np.arange(len(ff)) * phase_shift)
-        return np.fft.irfft(fr)
-
-    # Loop over every sub integration
-    for ip in range(len(ddfreq_averaged)):
-        try:
-            prof = ddfreq_averaged[ip]
-            nbin = len(prof)
-
-            # We are going to do a cross correlation by means of the Fourier transform and the Wiener-Kinchin theorem
-            f_template = np.fft.rfft(template)
-            f_prof = np.fft.rfft(prof)
-
-            # The cross correlation of a and b is the inverse transform of FT(a) times the conjugate of FT(b)
-            xspec = f_template.conj() * f_prof  # "cross spectrum"
-            xcor = np.fft.irfft(xspec)  # Cross correlation
-
-            ishift = np.argmax(np.abs(xcor))  # estimate of the shift directly from the peak cross-correlation
-
-            # We need to define some bounds to search. (Actually this might not be optimal)
-            lo = ishift - 1
-            hi = ishift + 1
-            nh = len(xspec)
-            # We minimise the chisquare parameter by findng the root of it's derivatiive following Taylor 1992
-            # This root_scalar method uses the 'Brent 1973' algorithm for root finding.
-            ret = opt.root_scalar(get_dchi, bracket=(lo, hi), x0=ishift, args=(nh, nbin), method='brentq')
-
-            # tau is the bin shift between data and template, which will become our ToA
-            tau = ret.root
-            # Again folow the math of Taylor 1992 to get the scale factor, which it calls 'b'
-            scale = get_b(tau, nh, nbin)
-            # And finally given the shift and scale we can find the uncertainty on the shift.
-            sigma_tau = get_sigma_tau(tau, nh, nbin, scale)
-
-            # Phase shift is bin shift divided by nbins
-            phase_shift = tau / nbin
-
-            # ToA is the phase shift converted to a time shift and added to the time of phase zero.
-            toa = times[ip] + approx_period * tau / nbin / 86400.0
-            toa_err = approx_period * sigma_tau / nbin
-            tempo2_toa = " test 611 {:.16f} {} jb42\n".format(toa, toa_err * 1e6)
-
-            toas.append(toa)
-            toa_errs.append(toa_err)
-            tempo2_toas.append(tempo2_toa)
-
-            phase = np.linspace(0, 1, nbin)
-
-            rotate_and_scaled_template = scale * rotate_phs(f_template, phase_shift)
-            diff = prof - rotate_and_scaled_template
-
-            d = np.amax(prof) - np.amin(prof)
-            if plots:
-                # And do some plotting...
-                plt.figure(figsize=(12, 8))
-                plt.xlabel("Pulse Phase")
-                plt.ylabel("Flux Density (arbitrary)")
-
-                plt.title(r"{} Profile {:d}:  $\delta t =$ {:.3f} $\pm$ {:.3f} ms".format(obsdata['source_name'], ip,
-                                                                                          1e3 * approx_period * phase_shift,
-                                                                                          1e3 * toa_err))
-                plt.step(phase, prof, color='black', linewidth=1.0, label="Data")
-                plt.plot(phase, rotate_and_scaled_template, color='red', label="Template")
-
-                plt.step(phase, diff - d, color='green', linewidth=1.0, alpha=0.8, label=r"Data$-$template")
-                plt.axhline(-d, ls=":", color='k')
-
-                plt.xlim(0, 1)
-                plt.ylim(np.amin(prof) - 1.2 * d, np.amax(prof) + 0.1 * d)
-
-                plt.legend(loc="lower left", ncol=3)
-
-                plt.show()
-                plt.close()
-        except ValueError as e:
-            print(e)
-    return np.array(toas), np.array(toa_errs), tempo2_toas
-
-
-######################################################################
-
 def get_earth_delay(toas):
     # POSITION OF CRAB PULSAR ra = 5.575 hours, dec = 22.0145 degrees
     pulsarpos = coord.SkyCoord(ra=5.575 * u.hourangle, dec=22.0145 * u.deg, frame='icrs')
     # Position of lovell telescope
-    lovellpos = coord.EarthLocation(lat=53.236 * u.deg, lon=-2.305 * u.deg, height=25 * u.m)
+    lovellpos = coord.EarthLocation(lat=53.236 * u.deg, lon=-2.305 * u.deg, height=78 * u.m)
+    #lovellpos = coord.EarthLocation(lat=180, lon=270, height=25) # for testing
 
     # convert to times using the astropy time module
     # time1 = astrotime.Time("2022-09-07T23:34:01.000", scale='utc')
@@ -221,9 +106,44 @@ def get_earth_delay(toas):
 
     earth_delay = (lovellpos.x * np.cos(altaz.az) * np.cos(altaz.alt) + \
                    lovellpos.y * np.sin(altaz.az) * np.cos(altaz.alt) + \
-                   lovellpos.z * np.sin(altaz.alt)) / const.c
+                   lovellpos.z * np.sin(altaz.alt)) / const.c.to(u.m/u.s)
+    #print("Earth delays:")
+    #print(earth_delay)
+    return np.mean(earth_delay)
 
-    print(earth_delay)
-    #print(np.mean(earth_delay))
 
-get_earth_delay(toa_list)
+def calculate_roemer_delay(time, ra, dec):
+    # Convert the time to an astropy Time object
+    time = astrotime.Time(time, scale='utc')
+
+    # Convert the RA and Dec to an astropy SkyCoord object.
+    # Get position of crab pulsar
+    pulsarpos = coord.SkyCoord(ra=ra*u.hourangle, dec=dec*u.deg, frame='icrs')
+    n_hat = pulsarpos.cartesian.xyz
+
+
+    # Get the position of the Earth at the given time
+    earth_pos = coord.get_body_barycentric('earth', time)
+    r_vector = earth_pos.xyz.to(u.m)
+
+    # Calculate the Roemer delay
+    c = const.c.to(u.m/u.s)
+    roemer_delay = (r_vector.dot(n_hat)) / c
+
+    return roemer_delay.to(u.s).value
+
+
+if __name__ == "__main__":
+    interp_func = get_interp() # polynomial function that can be used to get earth position at any time in year
+    earth_delay = get_earth_delay(toa_list).to(u.s).value
+    # Calculated roamer delay for the start time of the observation. To be more precise I could've calculated it at
+    # each toa. This is approximate
+    r_delay = calculate_roemer_delay(time_start, ra, dec)
+    print(f"Roemer delay: {r_delay} seconds")
+    print(f"Earth delay: {earth_delay} seconds")
+
+    total_delay = r_delay - earth_delay
+    print(f"Total delay: {total_delay} seconds")
+
+
+
