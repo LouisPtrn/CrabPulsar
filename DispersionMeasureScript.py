@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import scipy.optimize as opt
 import os
 
-filename=os.path.join("mydata/20260203_165003_B0329+54.npz")# Enter the filename of your data here
+filename=os.path.join("mydata/20260217_143556_B0531+21.npz")# Enter the filename of your data here
 obsdata = np.load(filename)
 print(obsdata['header'])
 data=obsdata['data']
@@ -195,7 +195,7 @@ def shift_rows(data_in, shifts):
 f_c = 611        # MHz (central frequency)
 bw = 10          # MHz total bandwidth
 
-P = 0.7145       # seconds, pulsar period
+P = 0.0334       # seconds, pulsar period
 DM = 25        # pc cm^-3, trial dispersion measure
 
 nchan = time_averaged.shape[0]
