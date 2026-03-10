@@ -15,7 +15,7 @@ from math import pi
 # Load files
 filename=os.path.join("mydata/20260217_143556_B0531+21.npz")
 obsdata = np.load(filename)
-print(obsdata["header"])
+# print(obsdata["header"])
 period_guess = obsdata['approx_period']
 
 toafile  = os.path.join("mydata/20260217_143556_B0531+21.npz.toas.txt")
@@ -25,7 +25,7 @@ dec = 22.0145
 time_start = "2026-02-17T14:35:56.000"  # Start time in iso format
 time_end = "2026-02-17T16:35:56.000"    # End time in iso format
 
-# barycentre file has the x y z values of the unity vector from the earth to the barycentre at each time step
+# barycentre file has the x y z values of the vector from the earth to the barycentre at each time step in AU
 year, month, day, xpos, ypos, zpos = np.loadtxt(baryfile,unpack=True)
 toa_list, toa_errs = np.loadtxt(toafile,unpack=True) # list of modified julian dates of arrival and errors
 
@@ -82,13 +82,13 @@ def get_interp(target_year, target_month, target_day):
     interp_funcs = []
     for i in range(3):  # For x, y, z
         interp_func = interpolate.lagrange(times_mjd[start_point:end_point], bary_positions[start_point:end_point, i])
-        print(times_mjd[start_point:end_point])
-        print(bary_positions[start_point:end_point, i])
+        # print(times_mjd[start_point:end_point])
+        # print(bary_positions[start_point:end_point, i])
         interp_funcs.append(interp_func)
     return interp_funcs
 
 
-def get_earth_delay(toas):
+def get_earth_delay(toa):
     # POSITION OF CRAB PULSAR ra = 5.575 hours, dec = 22.0145 degrees
     pulsarpos = coord.SkyCoord(ra=5.575 * u.hourangle, dec=22.0145 * u.deg, frame='icrs')
     # Position of lovell telescope
@@ -100,7 +100,7 @@ def get_earth_delay(toas):
     # time2 = astrotime.Time("2025-12-07T23:34:01.500", scale='utc')
 
     # toas is in MJD, so we can convert it to astropy Time objects
-    times = astrotime.Time(toas, format='mjd', scale='utc')
+    times = astrotime.Time(toa, format='mjd', scale='utc')
 
     # To compute the angle between the pulsar and the earth we can use astropy to tell us the elevation angle to the pulsar.
     # First Transform the coordinate system to an Alt-Az system. This needs the location of the telescope and the times
@@ -110,9 +110,8 @@ def get_earth_delay(toas):
     earth_delay = (lovellpos.x * np.cos(altaz.az) * np.cos(altaz.alt) +
                    lovellpos.y * np.sin(altaz.az) * np.cos(altaz.alt) +
                    lovellpos.z * np.sin(altaz.alt)) / const.c.to(u.m/u.s)
-    #print("Earth delays:")
-    #print(earth_delay)
-    return np.mean(earth_delay)
+
+    return earth_delay.to(u.s).value
 
 
 def calculate_roemer_delay(time, ra, dec):
@@ -154,41 +153,87 @@ def calc_roem(time, interp_funcs):
     return roemer_delay.to(u.s).value
 
 
-
-
-
-
 def test_interp():
     # Test the interpolation function by comparing it to the actual position at a known time
     test_time = "2026-02-18T14:35:56.000"
-    interp_funcs = get_interp(2026,2,18)
+    interp_funcs = get_interp(2026,2,17)
     interp_x = interp_funcs[0](astrotime.Time(test_time, scale='utc').mjd-61000)
     interp_y = interp_funcs[1](astrotime.Time(test_time, scale='utc').mjd-61000)
     interp_z = interp_funcs[2](astrotime.Time(test_time, scale='utc').mjd-61000)
     print(interp_x, interp_y, interp_z)
 
 
+def get_period(toa_list, period_guess):
+    total_error = 0
+    for i in range(len(toa_list)-1):
+        diff = (bary_toas[i] - bary_toas[0])*24*3600 # convert days to seconds
+
+        n = diff/period_guess # Number of times the pulsar has rotated between the first toa and the current toa
+        # n should be an integer if the period guess is correct, so we can check how close n is to an integer
+        n_int = round(n)
+        error = abs(n - n_int)
+        total_error += error
+    print(period_guess, total_error)
+
+
 if __name__ == "__main__":
     interp_funcs = get_interp(2026,2,17) # polynomial function
-    test_interp()
+    print(time_start)
+    # earth_delay = get_earth_delay(toa_list).to(u.s).value
+    # r_delay_1 = calculate_roemer_delay(time_start, ra, dec)
+    # r_delay_2 = calc_roem(time_start, interp_funcs)
+    # print(f"Roemer delay (astropy): {r_delay_1} seconds")
+    # print(f"Roemer delay (real method): {r_delay_2} seconds")
+    # print(f"Earth delay: {earth_delay} seconds")
+    #
+    # total_delay = r_delay_2 - earth_delay
+    # print(f"Total delay: {total_delay} seconds")
 
-    earth_delay = get_earth_delay(toa_list).to(u.s).value
-    # Calculated roamer delay for the start time of the observation
-    r_delay_1 = calculate_roemer_delay(time_start, ra, dec)
-    r_delay_2 = calc_roem(time_start, interp_funcs)
-    print(f"Roemer delay (astropy): {r_delay_1} seconds")
-    print(f"Roemer delay (real method): {r_delay_2} seconds")
-    print(f"Earth delay: {earth_delay} seconds")
+    bary_toas = [] # corrected times of arrival
 
-    total_delay = r_delay_2 - earth_delay
-    print(f"Total delay: {total_delay} seconds")
+    for toa in toa_list:
+        r_delay = calc_roem(astrotime.Time(toa, format='mjd', scale='utc'), interp_funcs)
+        e_delay = get_earth_delay(toa)
+        # convert both to days
+        total_delay = (r_delay - e_delay) / (24*3600) # convert seconds to days
+        bary_toa = toa - total_delay
+        bary_toas.append(bary_toa)
 
-    # now we can apply this delay to every TOA in the list to make the times of arrival
-    # as if they were observed at the barycentre of the solar system rather than at the earth
-    bary_toas = toa_list - total_delay/86400 # convert delay from seconds to days (MJD is in days)
-    print(toa_list)
-    print("First 10 barycentered TOAs:")
-    print(bary_toas[:10])
+    period_guess = 0.025
+    get_period(bary_toas, period_guess)
+
+    # approx period = 0.033 s
+    #trial_periods = np.linspace(0.03, 0.04, 1000)
+    # print(trial_periods)
+
+
+    #for period in trial_periods:
+
+    # for i in range(len(toa_list)-1):
+    #     diff = (bary_toas[i] - bary_toas[0])*24*3600 # convert days to seconds
+    #
+    #     n = diff/period_guess # Number of times the pulsar has rotated between the first toa and the current toa
+    #     # n should be an integer if the period guess is correct, so we can check how close n is to an integer
+    #     n_int = round(n)
+    #     error = abs(n - n_int)
+    #     total_error += error
+    #     # compute a new period guess based on the current toa and the first toa
+    #     new_period_guess = diff/n_int
+    #     print(f"TOA {i}: n = {n}, error = {error}, new period guess = {new_period_guess}")
+    #     total_errors.append(total_error)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

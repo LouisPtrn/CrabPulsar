@@ -29,8 +29,8 @@ with open(os.path.join(data_directory,hdrfile)) as f:
 
 # Now we read in the data from the file. We use the `fromfile` routine from numpy to read in the data as a 1-d array of 8-bit integers.
 data = np.fromfile(os.path.join(data_directory,datfile), dtype=np.int8)
-#for item in data:
-    #print(item)
+for item in data:
+    print(item)
 
 t = np.arange(len(data))*dt
 
@@ -73,14 +73,3 @@ plt.show()
 peak_frequency = freqs[np.argmax(power)]
 print("Peak frequency is {} Hz".format(peak_frequency))
 print("This corresponds to a period of {} seconds".format(1/peak_frequency))
-
-
-
-
-
-
-
-
-
-
-
