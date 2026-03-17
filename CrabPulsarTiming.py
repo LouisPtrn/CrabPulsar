@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from astropy.units.quantity_helper.function_helpers import gradient
 
 from scipy import interpolate
 import scipy.optimize as opt
@@ -22,8 +23,9 @@ toafile  = os.path.join("mydata/20260217_143556_B0531+21.npz.toas.txt")
 baryfile = os.path.join("ssb_files/ssb_2026.txt") # will work for all of 2026
 ra = 5.575
 dec = 22.0145
-time_start = "2026-02-17T14:35:56.000"  # Start time in iso format
-time_end = "2026-02-17T16:35:56.000"    # End time in iso format
+#
+time_start = "2026-03-03T14:37:49.974"  # Start time in iso format
+time_end = "2026-03-03T16:34:19.984"    # End time in iso format
 
 # barycentre file has the x y z values of the vector from the earth to the barycentre at each time step in AU
 year, month, day, xpos, ypos, zpos = np.loadtxt(baryfile,unpack=True)
@@ -164,17 +166,32 @@ def test_interp():
 
 
 def get_period(toa_list, period_guess):
-    total_error = 0
+    # residual  is the difference between the true pulse arrival time and the model pulse arrival time
+    # how will the residual will vary with time when the true period and model period are slightly different?
+    # The residual will increase linearly with time, because the model will be slightly off each time,
+    # and the error will accumulate. So we can check how the residuals change with time to see if our period guess is correct.
+    # If the residuals are increasing, then our period guess is too short. If the residuals are decreasing,
+    # then our period guess is too long. If the residuals are constant, then our period guess is correct.
+    residuals = []
     for i in range(len(toa_list)-1):
         diff = (bary_toas[i] - bary_toas[0])*24*3600 # convert days to seconds
 
-        n = diff/period_guess # Number of times the pulsar has rotated between the first toa and the current toa
-        # n should be an integer if the period guess is correct, so we can check how close n is to an integer
+        n = diff/period_guess # Number of times the pulsar should have rotated between the first toa and the current toa
         n_int = round(n)
-        error = abs(n - n_int)
-        total_error += error
-    print(period_guess, total_error)
+        residual = (n-n_int)
+        residuals.append(residual)
+    residuals.append(0)
+    # plot the residuals against time
+    residuals = np.array(residuals)
+    toa_list = np.array(toa_list)
+    plt.plot(toa_list, residuals, marker='o')
+    plt.show()
 
+
+    # get gradient
+    grad = np.gradient(residuals)
+    grad = np.mean(grad)
+    return period_guess, residuals, grad
 
 if __name__ == "__main__":
     interp_funcs = get_interp(2026,2,17) # polynomial function
@@ -199,29 +216,28 @@ if __name__ == "__main__":
         bary_toa = toa - total_delay
         bary_toas.append(bary_toa)
 
-    period_guess = 0.025
-    get_period(bary_toas, period_guess)
 
-    # approx period = 0.033 s
-    #trial_periods = np.linspace(0.03, 0.04, 1000)
-    # print(trial_periods)
+    trial_periods = np.linspace(0.033, 0.034, 100)
+    guess_period = period_guess
+    periods = []
+    grads = []
+    for i in range(50):
+        model_data = get_period(bary_toas, guess_period)
+        residuals = model_data[1]
+        grad = model_data[2]
+        print(guess_period)
+        periods.append(model_data[0])
+        grads.append(grad)
+        if grad > 0:
+            guess_period += 1e-8
+        else:
+            guess_period -= 1e-8
 
+    calculated_period = str(guess_period)
 
-    #for period in trial_periods:
-
-    # for i in range(len(toa_list)-1):
-    #     diff = (bary_toas[i] - bary_toas[0])*24*3600 # convert days to seconds
-    #
-    #     n = diff/period_guess # Number of times the pulsar has rotated between the first toa and the current toa
-    #     # n should be an integer if the period guess is correct, so we can check how close n is to an integer
-    #     n_int = round(n)
-    #     error = abs(n - n_int)
-    #     total_error += error
-    #     # compute a new period guess based on the current toa and the first toa
-    #     new_period_guess = diff/n_int
-    #     print(f"TOA {i}: n = {n}, error = {error}, new period guess = {new_period_guess}")
-    #     total_errors.append(total_error)
-
+    with open("calculated_period.txt", "w") as f:
+        f.write(calculated_period)
+        f.close()
 
 
 
