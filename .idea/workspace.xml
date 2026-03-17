@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f744ce19-3b0c-4529-ad0e-c447a7a09810" name="Changes" comment="Added crab pulsar timing script.&#10;&#10;Includes interpolation function calculation and earth position delay.">
-      <change beforePath="$PROJECT_DIR$/.idea/CrabPulsar.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CrabPulsar.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CrabPulsarTiming.py" beforeDir="false" afterPath="$PROJECT_DIR$/CrabPulsarTiming.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/calculated_period.txt" beforeDir="false" afterPath="$PROJECT_DIR$/calculated_period.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,6 +245,7 @@
       <workItem from="1772551588993" duration="4488000" />
       <workItem from="1773740454995" duration="523000" />
       <workItem from="1773740994294" duration="11929000" />
+      <workItem from="1773757302017" duration="8817000" />
     </task>
     <task id="LOCAL-00001" summary="Test push">
       <option name="closed" value="true" />
@@ -298,7 +298,7 @@
     <SUITE FILE_PATH="coverage/CrabPulsar$PeriodScript__1_.coverage" NAME="PeriodScript (1) Coverage Results" MODIFIED="1772533122496" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CrabPulsar$DispersionMeasureScript.coverage" NAME="DispersionMeasureScript Coverage Results" MODIFIED="1772552443902" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CrabPulsar$DispersionVisualisation.coverage" NAME="DispersionVisualisation Coverage Results" MODIFIED="1770738011197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CrabPulsar$CrabPulsarTiming.coverage" NAME="CrabPulsarTiming Coverage Results" MODIFIED="1773751517779" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CrabPulsar$CrabPulsarTiming.coverage" NAME="CrabPulsarTiming Coverage Results" MODIFIED="1773766074855" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

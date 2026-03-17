@@ -14,18 +14,19 @@ from matplotlib import pyplot as plt
 from math import pi
 
 # Load files
-filename=os.path.join("mydata/20260217_143556_B0531+21.npz")
+filename=os.path.join("mydata/20260303_113724_B0531+21.npz")
 obsdata = np.load(filename)
 # print(obsdata["header"])
 period_guess = obsdata['approx_period']
+print(period_guess)
 
-toafile  = os.path.join("mydata/20260217_143556_B0531+21.npz.toas.txt")
+toafile  = os.path.join("mydata/20260303_113724_B0531+21.npz.toas.txt")
 baryfile = os.path.join("ssb_files/ssb_2026.txt") # will work for all of 2026
 ra = 5.575
 dec = 22.0145
-#
-time_start = "2026-03-03T14:37:49.974"  # Start time in iso format
-time_end = "2026-03-03T16:34:19.984"    # End time in iso format
+
+time_start = "2026-03-03T11:39:49.981"  # Start time in iso format
+time_end = "2026-03-03T16:38:39.979"    # End time in iso format
 
 # barycentre file has the x y z values of the vector from the earth to the barycentre at each time step in AU
 year, month, day, xpos, ypos, zpos = np.loadtxt(baryfile,unpack=True)
@@ -91,27 +92,27 @@ def get_interp(target_year, target_month, target_day):
 
 
 def get_earth_delay(toa):
+    # this function gets the delay between light from the pulsar reaching the centre of the earth and reaching the telescope
+
     # POSITION OF CRAB PULSAR ra = 5.575 hours, dec = 22.0145 degrees
     pulsarpos = coord.SkyCoord(ra=5.575 * u.hourangle, dec=22.0145 * u.deg, frame='icrs')
     # Position of lovell telescope
     lovellpos = coord.EarthLocation(lat=53.236 * u.deg, lon=-2.305 * u.deg, height=78 * u.m)
-    #lovellpos = coord.EarthLocation(lat=180, lon=270, height=25) # for testing
+    # lovellpos = coord.EarthLocation(lat=0 * u.deg, lon=90, height=-6000000) # for testing
 
     # convert to times using the astropy time module
     # time1 = astrotime.Time("2022-09-07T23:34:01.000", scale='utc')
     # time2 = astrotime.Time("2025-12-07T23:34:01.500", scale='utc')
 
     # toas is in MJD, so we can convert it to astropy Time objects
-    times = astrotime.Time(toa, format='mjd', scale='utc')
-
+    time = astrotime.Time(toa, format='mjd', scale='utc')
     # To compute the angle between the pulsar and the earth we can use astropy to tell us the elevation angle to the pulsar.
     # First Transform the coordinate system to an Alt-Az system. This needs the location of the telescope and the times
     # of the observation.
-    altaz = pulsarpos.transform_to(coord.AltAz(obstime=times, location=lovellpos))
-
-    earth_delay = (lovellpos.x * np.cos(altaz.az) * np.cos(altaz.alt) +
-                   lovellpos.y * np.sin(altaz.az) * np.cos(altaz.alt) +
-                   lovellpos.z * np.sin(altaz.alt)) / const.c.to(u.m/u.s)
+    altaz = pulsarpos.transform_to(coord.AltAz(obstime=time, location=lovellpos))
+    elevation = altaz.alt
+    r = const.R_earth.to(u.m)
+    earth_delay = r * np.sin(elevation)/const.c.to(u.m/u.s)
 
     return earth_delay.to(u.s).value
 
@@ -168,10 +169,6 @@ def test_interp():
 def get_period(toa_list, period_guess):
     # residual  is the difference between the true pulse arrival time and the model pulse arrival time
     # how will the residual will vary with time when the true period and model period are slightly different?
-    # The residual will increase linearly with time, because the model will be slightly off each time,
-    # and the error will accumulate. So we can check how the residuals change with time to see if our period guess is correct.
-    # If the residuals are increasing, then our period guess is too short. If the residuals are decreasing,
-    # then our period guess is too long. If the residuals are constant, then our period guess is correct.
     residuals = []
     for i in range(len(toa_list)-1):
         diff = (bary_toas[i] - bary_toas[0])*24*3600 # convert days to seconds
@@ -193,8 +190,29 @@ def get_period(toa_list, period_guess):
     grad = np.mean(grad)
     return period_guess, residuals, grad
 
+
+def get_true_period(toa_list, period_guess):
+    residuals = []
+    for i in range(len(toa_list)-1):
+        diff = (bary_toas[i] - bary_toas[0])*24*3600
+        n = diff/period_guess
+        n_int = round(n)
+        residual = (n-n_int)
+        residuals.append(residual)
+
+    # get true period from gradient of residuals
+    residuals = np.array(residuals)
+    toa_list = np.array(toa_list)
+    grad = (np.gradient(residuals))
+    print(grad)
+    if grad > 0:
+        period = period_guess + grad*(diff/n_int)
+    else:
+        period = period_guess - grad*(diff/n_int)
+    return period
+
 if __name__ == "__main__":
-    interp_funcs = get_interp(2026,2,17) # polynomial function
+    interp_funcs = get_interp(2026,3,3) # polynomial function
     print(time_start)
     # earth_delay = get_earth_delay(toa_list).to(u.s).value
     # r_delay_1 = calculate_roemer_delay(time_start, ra, dec)
@@ -221,7 +239,7 @@ if __name__ == "__main__":
     guess_period = period_guess
     periods = []
     grads = []
-    for i in range(50):
+    for i in range(100):
         model_data = get_period(bary_toas, guess_period)
         residuals = model_data[1]
         grad = model_data[2]
@@ -229,11 +247,16 @@ if __name__ == "__main__":
         periods.append(model_data[0])
         grads.append(grad)
         if grad > 0:
-            guess_period += 1e-8
+            guess_period += 1e-9
         else:
-            guess_period -= 1e-8
+            guess_period -= 1e-9
 
     calculated_period = str(guess_period)
+    print(grads[0])
+
+    guess_period = period_guess
+    print("##########")
+    print(get_true_period(bary_toas, guess_period))
 
     with open("calculated_period.txt", "w") as f:
         f.write(calculated_period)
