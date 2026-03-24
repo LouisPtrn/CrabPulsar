@@ -5,8 +5,8 @@ import os
 
 # get reference DMs from the ATNF Pulsar Catalogue
 
-filename=os.path.join("mydata/20260217_095751_B1933+16.npz")
-name = "B1933+16"
+filename=os.path.join("mydata/20260317_110240_B0531+21.npz")
+name = "B0531+21"
 obsdata = np.load(filename)
 print(obsdata['header'])
 data=obsdata['data']
@@ -262,7 +262,7 @@ with open(filename+".toas.txt","w") as outf:
 
 
 # Trial DM range (adjust as needed)
-DM_trials = np.linspace(0, 50, 500)   # pc cm^-3
+DM_trials = np.linspace(10, 100, 1000)   # pc cm^-3
 print(DM_trials)
 snr_vals = []
 

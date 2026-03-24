@@ -1,13 +1,19 @@
-import os
 import numpy as np
 
-from astropy import coordinates as coord
-from astropy import units as u
-from astropy import constants as const
-from astropy import time as astrotime
+def get_age(m):
+    tau = 0
 
-from matplotlib import pyplot as plt
-from math import pi
 
 if __name__ == "__main__":
-    pass
+    # format (mjd period error)
+    # read period of last data point
+    with open("Calculated_periods.txt","r") as f:
+        lines = f.readlines()
+        last_line = lines[-1]
+        P = float(last_line.split()[1])
+        f.close()
+
+    print(P)
+    m = 3.725 * 10 ** -8  # pulsar period (s) / time (mjd)
+    # convert to second/second
+    m = m/(24*3600)
