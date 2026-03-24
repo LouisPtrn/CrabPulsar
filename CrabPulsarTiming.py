@@ -147,10 +147,10 @@ def test_interp():
     print(interp_x, interp_y, interp_z)
 
 
-def get_period(toa_list, period_guess):
+def get_period(toa_list, period_guess, show):
     # residual  is the difference between the true pulse arrival time and the model pulse arrival time
     # how will the residual will vary with time when the true period and model period are slightly different?
-    residuals = []
+    residuals = [0]
     for i in range(len(toa_list)-1):
         diff = (bary_toas[i] - bary_toas[0])*24*3600 # convert days to seconds
 
@@ -158,12 +158,14 @@ def get_period(toa_list, period_guess):
         n_int = round(n)
         residual = (n-n_int)
         residuals.append(residual)
-    residuals.append(0)
+
     # plot the residuals against time
     residuals = np.array(residuals)
     toa_list = np.array(toa_list)
-    # plt.plot(toa_list, residuals, marker='o')
-    # plt.show()
+
+    if show:
+        plt.plot(toa_list, residuals, marker='o')
+        plt.show()
 
     # get gradient
     grad = np.gradient(residuals)
@@ -172,51 +174,39 @@ def get_period(toa_list, period_guess):
     return period_guess, residuals, grad
 
 
-def get_true_period(toa_list, period_guess):
-    residuals = []
-    for i in range(len(toa_list)-1):
-        diff = (bary_toas[i] - bary_toas[0])*24*3600
-        n = diff/period_guess
-        n_int = round(n)
-        residual = (n-n_int)
-        residuals.append(residual)
-
-    # get true period from gradient of residuals
-    residuals = np.array(residuals)
-    toa_list = np.array(toa_list)
-    grad = (np.gradient(residuals))
-    print(grad)
-    if grad > 0:
-        period = period_guess + grad*(diff/n_int)
-    else:
-        period = period_guess - grad*(diff/n_int)
-    return period
-
 if __name__ == "__main__":
     # Load files
-    filename = os.path.join("mydata/20260217_143556_B0531+21.npz")
+    filename = os.path.join("mydata/20260317_110240_B0531+21.npz")
     obsdata = np.load(filename)
     # print(obsdata["header"])
     period_guess = obsdata['approx_period']
     print(period_guess)
 
-    toafile = os.path.join("mydata/20260217_143556_B0531+21.npz.toas.txt")
+    toafile = os.path.join("mydata/20260317_110240_B0531+21.npz.toas.txt")
     baryfile = os.path.join("ssb_files/ssb_2026.txt")  # will work for all of 2026
-    ra = 5.5755
-    dec = 22.0175
+    # right ascension = 5:34:31.93357
+    # declination = +22:00:52.1927
+    ra = 5.5755371028
+    dec = 22.01449797222
 
-    time_start = "2026-02-17T14:37:49.974"  # Start time in iso format
-    time_end = "2026-02-17T16:34:19.984"    # End time in iso format
+    # time_start = "2026-02-17T14:37:49.974"  # Start time in iso format
+    # time_end = "2026-02-17T16:34:19.984"    # End time in iso format
     # time_start = "2026-03-03T11:39:49.981"
     # time_end = "2026-03-03T16:38:39.979"
-    # time_start = "2026-03-17T11:04:29.546"
-    # time_end = "2026-03-17T16:33:50.004"
-    t_month = 2
+    time_start = "2026-03-17T11:04:29.546"
+    time_end = "2026-03-17T16:33:50.004"
+    t_month = 3
     t_day = 17
 
     # barycentre file has the x y z values of the vector from the earth to the barycentre at each time step in AU
     year, month, day, xpos, ypos, zpos = np.loadtxt(baryfile, unpack=True)
     toa_list, toa_errs = np.loadtxt(toafile, unpack=True)  # list of modified julian dates of arrival and errors
+
+    # replace nan in toa_errs with the mean of the non-nan values
+    mean_toa_err = np.nanmean(toa_errs)
+    toa_errs = np.where(np.isnan(toa_errs), mean_toa_err, toa_errs)
+
+    toa_ratios = toa_errs / toa_list
 
     interp_funcs = get_interp(2026,t_month,t_day) # polynomial function
 
@@ -241,12 +231,13 @@ if __name__ == "__main__":
         bary_toas.append(bary_toa)
 
 
+
     trial_periods = np.linspace(0.033, 0.034, 100)
     guess_period = period_guess
     periods = []
     grads = []
     for i in range(500):
-        model_data = get_period(bary_toas, guess_period)
+        model_data = get_period(bary_toas, guess_period, False)
         residuals = model_data[1]
         grad = model_data[2]
         print(guess_period)
@@ -257,10 +248,16 @@ if __name__ == "__main__":
         else:
             guess_period -= 1e-10
 
-    calculated_period = str(guess_period) # what is the uncertainty on this? we can get it from the gradient, but we need to convert it to a period uncertainty
+    calculated_period = str(guess_period)
+    # get error on this
+    residuals = np.array(residuals)
+    sigma_resid = np.std(residuals)
+    grads = np.array(grads)
 
+    total_time_sec = (toa_list[-1] - toa_list[0]) * 24 * 3600
+    N_rot = total_time_sec/guess_period
+    error = sigma_resid * guess_period / N_rot
 
-    # print(grads)
 
     guess_period = period_guess
     print("##########")
@@ -269,7 +266,7 @@ if __name__ == "__main__":
     # add date and period to text file
     print(time_start)
     print(calculated_period)
-    error = 10**-8
+
 
     with open("Calculated_periods.txt", "a") as f:
         # convert time to mjd

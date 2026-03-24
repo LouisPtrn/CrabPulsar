@@ -7,8 +7,12 @@
     <list default="true" id="f744ce19-3b0c-4529-ad0e-c447a7a09810" name="Changes" comment="Finished period derivative stuff. Can now plot with lsfr">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Calculated_periods.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Calculated_periods.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CrabPulsarTiming.py" beforeDir="false" afterPath="$PROJECT_DIR$/CrabPulsarTiming.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DispersionMeasureScript.py" beforeDir="false" afterPath="$PROJECT_DIR$/DispersionMeasureScript.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PeriodDerivative.py" beforeDir="false" afterPath="$PROJECT_DIR$/PeriodDerivative.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fit_result.png" beforeDir="false" afterPath="$PROJECT_DIR$/fit_result.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mydata/20260217_143556_B0531+21.npz.toas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mydata/20260217_143556_B0531+21.npz.toas.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mydata/20260303_113724_B0531+21.npz.toas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mydata/20260303_113724_B0531+21.npz.toas.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mydata/20260317_110240_B0531+21.npz.toas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mydata/20260317_110240_B0531+21.npz.toas.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,12 +45,12 @@
     &quot;assignee&quot;: &quot;LouisPtrn&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/LouisPtrn/CrabPulsar",
-    "accountId": "b1d1f7cc-3ec6-4bb4-a513-cc0121c0a9f2"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/LouisPtrn/CrabPulsar&quot;,
+    &quot;accountId&quot;: &quot;b1d1f7cc-3ec6-4bb4-a513-cc0121c0a9f2&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/CrabPulsarTiming.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -64,63 +68,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python tests.Python tests in CrabPulsarTiming.py.executor": "Run",
-    "Python.CrabPulsarPeriods.executor": "Run",
-    "Python.CrabPulsarTiming.executor": "Run",
-    "Python.DispersionMeasureScript.executor": "Run",
-    "Python.DispersionVisualisation.executor": "Run",
-    "Python.LSFR-20.executor": "Run",
-    "Python.PeriodCalculator.executor": "Run",
-    "Python.PeriodDerivative.executor": "Run",
-    "Python.PeriodScript (1).executor": "Run",
-    "Python.PeriodScript2.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "ai.playground.ignore.import.keys.banner.in.settings": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/x72635lp.DS/PycharmProjects/Crab Pulsar",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python tests.Python tests in CrabPulsarTiming.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CrabPulsarPeriods.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CrabPulsarTiming.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DispersionMeasureScript.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DispersionVisualisation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.LSFR-20.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PeriodCalculator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PeriodDerivative.executor&quot;: &quot;Run&quot;,
+    &quot;Python.PeriodScript (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.PeriodScript2.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ai.playground.ignore.import.keys.banner.in.settings&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/x72635lp.DS/PycharmProjects/Crab Pulsar&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\x72635lp.DS\PycharmProjects\Crab Pulsar" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.PeriodDerivative">
-    <configuration name="CrabPulsarPeriods" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="CrabPulsar" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CrabPulsarPeriods.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.LSFR-20">
     <configuration name="CrabPulsarTiming" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="CrabPulsar" />
       <option name="ENV_FILES" value="" />
@@ -215,13 +195,29 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests in CrabPulsarTiming.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="CrabPulsar" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="RUN_TOOL" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/CrabPulsarTiming.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.PeriodDerivative" />
-        <item itemvalue="Python.DispersionMeasureScript" />
         <item itemvalue="Python.LSFR-20" />
         <item itemvalue="Python.CrabPulsarTiming" />
-        <item itemvalue="Python.CrabPulsarPeriods" />
+        <item itemvalue="Python tests.Python tests in CrabPulsarTiming.py" />
+        <item itemvalue="Python.DispersionMeasureScript" />
+        <item itemvalue="Python.PeriodDerivative" />
       </list>
     </recent_temporary>
   </component>
@@ -283,7 +279,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774354565553</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Finished period derivative stuff. Can now plot with lsfr..">
+      <option name="closed" value="true" />
+      <created>1774357691649</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1774357691649</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

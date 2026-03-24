@@ -198,7 +198,7 @@ f_c = 611        # MHz (central frequency)
 bw = 10          # MHz total bandwidth
 
 P = obsdata['approx_period']
-DM = 25        # pc cm^-3, trial dispersion measure
+DM = 56.7712        # pc cm^-3, trial dispersion measure
 
 nchan = time_averaged.shape[0]
 
@@ -252,7 +252,7 @@ with open(filename+".toas.txt","w") as outf:
 
 #  minimum integration time required to detect a 1 Jy source with the 42-ft radio telescope?
 # S_min = 1.0  # Jy
-# T_sys = 100.0  # K (system temperature of the telescope - this is a gue
+# T_sys = 100.0  # K (system temperature of the telescope - this is a guess)
 # G = 0.1  # K/Jy
 # n_pol = 2  # number of polarizations
 # BW = 10e6  # Hz
