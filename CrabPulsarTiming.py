@@ -159,12 +159,14 @@ def get_period(toa_list, period_guess, show):
         residual = (n-n_int)
         residuals.append(residual)
 
-    # plot the residuals against time
     residuals = np.array(residuals)
     toa_list = np.array(toa_list)
 
     if show:
-        plt.plot(toa_list, residuals, marker='o')
+        plt.plot(toa_list, residuals, marker='.',color="black")
+        plt.xlabel('Time since epoch (MJD)')
+        plt.ylabel("Residual")
+        plt.title("Residuals against time for Crab Pulsar 2026/17/3")
         plt.show()
 
     # get gradient
@@ -236,8 +238,12 @@ if __name__ == "__main__":
     guess_period = period_guess
     periods = []
     grads = []
+
     for i in range(500):
-        model_data = get_period(bary_toas, guess_period, False)
+        if i % 100 == 0:
+            model_data = get_period(bary_toas, guess_period, True)
+        else:
+            model_data = get_period(bary_toas, guess_period, False)
         residuals = model_data[1]
         grad = model_data[2]
         print(guess_period)
@@ -247,6 +253,7 @@ if __name__ == "__main__":
             guess_period += 1e-10
         else:
             guess_period -= 1e-10
+
 
     calculated_period = str(guess_period)
     # get error on this
@@ -268,8 +275,8 @@ if __name__ == "__main__":
     print(calculated_period)
 
 
-    with open("Calculated_periods.txt", "a") as f:
-        # convert time to mjd
-        time_start_mjd = astrotime.Time(time_start, scale='utc').mjd
-        f.write(str(time_start_mjd)+" "+str(calculated_period)+" "+str(error)+"\n")
-        f.close()
+    # with open("Calculated_periods.txt", "a") as f:
+    #     # convert time to mjd
+    #     time_start_mjd = astrotime.Time(time_start, scale='utc').mjd
+    #     f.write(str(time_start_mjd)+" "+str(calculated_period)+" "+str(error)+"\n")
+    #     f.close()

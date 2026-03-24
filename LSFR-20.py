@@ -42,7 +42,7 @@ DELIMITER = ' '  # Set to space, ' ', if working with .txt file without commas
 # Plotting details
 PLOT_TITLE = 'Plot of crab pulsar period'
 X_LABEL = 'Time (MJD)'
-Y_LABEL = 'Period'
+Y_LABEL = 'Period (s)'
 AUTO_X_LIMITS = True
 X_LIMITS = [0., 10.]  # Not used unless AUTO_X_LIMITS = False
 AUTO_Y_LIMITS = True

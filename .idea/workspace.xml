@@ -4,16 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f744ce19-3b0c-4529-ad0e-c447a7a09810" name="Changes" comment="Finished period derivative stuff. Can now plot with lsfr">
+    <list default="true" id="f744ce19-3b0c-4529-ad0e-c447a7a09810" name="Changes" comment="Finished period derivative stuff. Can now plot with lsfr. &#10;Added errors to period derivative. Seems ok">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Calculated_periods.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Calculated_periods.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CrabPulsarTiming.py" beforeDir="false" afterPath="$PROJECT_DIR$/CrabPulsarTiming.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DispersionMeasureScript.py" beforeDir="false" afterPath="$PROJECT_DIR$/DispersionMeasureScript.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PeriodDerivative.py" beforeDir="false" afterPath="$PROJECT_DIR$/PeriodDerivative.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LSFR-20.py" beforeDir="false" afterPath="$PROJECT_DIR$/LSFR-20.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fit_result.png" beforeDir="false" afterPath="$PROJECT_DIR$/fit_result.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mydata/20260217_143556_B0531+21.npz.toas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mydata/20260217_143556_B0531+21.npz.toas.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mydata/20260303_113724_B0531+21.npz.toas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mydata/20260303_113724_B0531+21.npz.toas.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mydata/20260317_110240_B0531+21.npz.toas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mydata/20260317_110240_B0531+21.npz.toas.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +95,7 @@
       <recent name="C:\Users\x72635lp.DS\PycharmProjects\Crab Pulsar" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.LSFR-20">
+  <component name="RunManager" selected="Python.CrabPulsarTiming">
     <configuration name="CrabPulsarTiming" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="CrabPulsar" />
       <option name="ENV_FILES" value="" />
@@ -213,8 +208,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.LSFR-20" />
         <item itemvalue="Python.CrabPulsarTiming" />
+        <item itemvalue="Python.LSFR-20" />
         <item itemvalue="Python tests.Python tests in CrabPulsarTiming.py" />
         <item itemvalue="Python.DispersionMeasureScript" />
         <item itemvalue="Python.PeriodDerivative" />
@@ -287,7 +282,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774357691649</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Finished period derivative stuff. Can now plot with lsfr. &#10;Added errors to period derivative. Seems ok">
+      <option name="closed" value="true" />
+      <created>1774369290313</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1774369290314</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -309,7 +312,8 @@
     <MESSAGE value="Test push 2" />
     <MESSAGE value="Added crab pulsar timing script.&#10;&#10;Includes interpolation function calculation and earth position delay." />
     <MESSAGE value="Finished period derivative stuff. Can now plot with lsfr" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished period derivative stuff. Can now plot with lsfr" />
+    <MESSAGE value="Finished period derivative stuff. Can now plot with lsfr. &#10;Added errors to period derivative. Seems ok" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished period derivative stuff. Can now plot with lsfr. &#10;Added errors to period derivative. Seems ok" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/CrabPulsar$PeriodScript__1_.coverage" NAME="PeriodScript (1) Coverage Results" MODIFIED="1772533122496" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
