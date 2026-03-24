@@ -3,7 +3,10 @@ import matplotlib.pyplot as plt
 import scipy.optimize as opt
 import os
 
-filename=os.path.join("mydata/20260217_143556_B0531+21.npz")# Enter the filename of your data here
+# get reference DMs from the ATNF Pulsar Catalogue
+
+filename=os.path.join("mydata/20260217_095751_B1933+16.npz")
+name = "B1933+16"
 obsdata = np.load(filename)
 print(obsdata['header'])
 data=obsdata['data']
@@ -15,7 +18,7 @@ template=np.loadtxt(templatefilename)
 #plt.plot(template)
 
 
-#  This function will shift each row of a 2-d (3-d) array by the the number of columns specified in the "shifts" array.
+#  This function will shift each row of a 2-d (3-d) array by the number of columns specified in the "shifts" array.
 #  data_in - the 2-d (3-d) array to work on
 #  shifts - the shifts to apply
 #  Returns: The shifted array
@@ -189,13 +192,12 @@ def shift_rows(data_in, shifts):
             shifted[chan] = np.roll(data_in[chan],int(shifts[chan]))
     return shifted
 
-# This example scaling is wrong - you need to determine the right values to scale!
 #freq = 50 + ichan * 5
 # right scaling
 f_c = 611        # MHz (central frequency)
 bw = 10          # MHz total bandwidth
 
-P = 0.0334       # seconds, pulsar period
+P = obsdata['approx_period']
 DM = 25        # pc cm^-3, trial dispersion measure
 
 nchan = time_averaged.shape[0]
@@ -260,7 +262,7 @@ with open(filename+".toas.txt","w") as outf:
 
 
 # Trial DM range (adjust as needed)
-DM_trials = np.linspace(1, 100, 1000)   # pc cm^-3
+DM_trials = np.linspace(0, 50, 500)   # pc cm^-3
 print(DM_trials)
 snr_vals = []
 
@@ -312,11 +314,11 @@ print("Estimated DM uncertainty = {:.3f} pc cm^-3".format(dm_uncertainty))
 x_parabola = np.linspace(x_fit.min(), x_fit.max(), 100)
 y_parabola = parabola(x_parabola, *popt)
 plt.figure(figsize=(10, 6))
-plt.plot(DM_trials, snr_vals, label='S/N vs DM')
+plt.plot(DM_trials, snr_vals, label='S/N vs DM', color='blue')
 plt.plot(x_parabola, y_parabola, label='Parabola Fit', color='red')
 plt.axvline(best_DM, color='green', linestyle='--', label='Best DM')
-plt.xlabel('Dispersion Measure (pc cm$^{-3}$)')
+plt.xlabel('Trial Dispersion Measure (pc cm$^{-3}$)')
 plt.ylabel('S/N')
-plt.title('S/N vs DM with Parabola Fit')
+plt.title('S/N against DM for {}'.format(name))
 plt.legend()
 plt.show()

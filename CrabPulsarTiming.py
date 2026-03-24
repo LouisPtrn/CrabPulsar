@@ -13,25 +13,6 @@ from astropy import time as astrotime
 from matplotlib import pyplot as plt
 from math import pi
 
-# Load files
-filename=os.path.join("mydata/20260303_113724_B0531+21.npz")
-obsdata = np.load(filename)
-# print(obsdata["header"])
-period_guess = obsdata['approx_period']
-print(period_guess)
-
-toafile  = os.path.join("mydata/20260303_113724_B0531+21.npz.toas.txt")
-baryfile = os.path.join("ssb_files/ssb_2026.txt") # will work for all of 2026
-ra = 5.575
-dec = 22.0145
-
-time_start = "2026-03-03T11:39:49.981"  # Start time in iso format
-time_end = "2026-03-03T16:38:39.979"    # End time in iso format
-
-# barycentre file has the x y z values of the vector from the earth to the barycentre at each time step in AU
-year, month, day, xpos, ypos, zpos = np.loadtxt(baryfile,unpack=True)
-toa_list, toa_errs = np.loadtxt(toafile,unpack=True) # list of modified julian dates of arrival and errors
-
 
 def get_interp(target_year, target_month, target_day):
     # Interpolation of Earth-Barycenter position
@@ -181,13 +162,13 @@ def get_period(toa_list, period_guess):
     # plot the residuals against time
     residuals = np.array(residuals)
     toa_list = np.array(toa_list)
-    plt.plot(toa_list, residuals, marker='o')
-    plt.show()
-
+    # plt.plot(toa_list, residuals, marker='o')
+    # plt.show()
 
     # get gradient
     grad = np.gradient(residuals)
     grad = np.mean(grad)
+    # get uncertainty on period
     return period_guess, residuals, grad
 
 
@@ -212,8 +193,33 @@ def get_true_period(toa_list, period_guess):
     return period
 
 if __name__ == "__main__":
-    interp_funcs = get_interp(2026,3,3) # polynomial function
-    print(time_start)
+    # Load files
+    filename = os.path.join("mydata/20260217_143556_B0531+21.npz")
+    obsdata = np.load(filename)
+    # print(obsdata["header"])
+    period_guess = obsdata['approx_period']
+    print(period_guess)
+
+    toafile = os.path.join("mydata/20260217_143556_B0531+21.npz.toas.txt")
+    baryfile = os.path.join("ssb_files/ssb_2026.txt")  # will work for all of 2026
+    ra = 5.5755
+    dec = 22.0175
+
+    time_start = "2026-02-17T14:37:49.974"  # Start time in iso format
+    time_end = "2026-02-17T16:34:19.984"    # End time in iso format
+    # time_start = "2026-03-03T11:39:49.981"
+    # time_end = "2026-03-03T16:38:39.979"
+    # time_start = "2026-03-17T11:04:29.546"
+    # time_end = "2026-03-17T16:33:50.004"
+    t_month = 2
+    t_day = 17
+
+    # barycentre file has the x y z values of the vector from the earth to the barycentre at each time step in AU
+    year, month, day, xpos, ypos, zpos = np.loadtxt(baryfile, unpack=True)
+    toa_list, toa_errs = np.loadtxt(toafile, unpack=True)  # list of modified julian dates of arrival and errors
+
+    interp_funcs = get_interp(2026,t_month,t_day) # polynomial function
+
     # earth_delay = get_earth_delay(toa_list).to(u.s).value
     # r_delay_1 = calculate_roemer_delay(time_start, ra, dec)
     # r_delay_2 = calc_roem(time_start, interp_funcs)
@@ -239,7 +245,7 @@ if __name__ == "__main__":
     guess_period = period_guess
     periods = []
     grads = []
-    for i in range(100):
+    for i in range(500):
         model_data = get_period(bary_toas, guess_period)
         residuals = model_data[1]
         grad = model_data[2]
@@ -247,33 +253,26 @@ if __name__ == "__main__":
         periods.append(model_data[0])
         grads.append(grad)
         if grad > 0:
-            guess_period += 1e-9
+            guess_period += 1e-10
         else:
-            guess_period -= 1e-9
+            guess_period -= 1e-10
 
-    calculated_period = str(guess_period)
-    print(grads[0])
+    calculated_period = str(guess_period) # what is the uncertainty on this? we can get it from the gradient, but we need to convert it to a period uncertainty
+
+
+    # print(grads)
 
     guess_period = period_guess
     print("##########")
-    print(get_true_period(bary_toas, guess_period))
+    # print(get_true_period(bary_toas, guess_period))
 
-    with open("calculated_period.txt", "w") as f:
-        f.write(calculated_period)
+    # add date and period to text file
+    print(time_start)
+    print(calculated_period)
+    error = 10**-8
+
+    with open("Calculated_periods.txt", "a") as f:
+        # convert time to mjd
+        time_start_mjd = astrotime.Time(time_start, scale='utc').mjd
+        f.write(str(time_start_mjd)+" "+str(calculated_period)+" "+str(error)+"\n")
         f.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
